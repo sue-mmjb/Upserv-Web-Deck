@@ -2355,9 +2355,13 @@ box-shadow: 0 6px 18px 0 rgba(124, 191, 213, 0.50);
       '</div>';
 
     var oldSection = document.getElementById('comp-mkkxum1d');
-    if (oldSection) {
-      oldSection.style.display = 'none';
-      oldSection.parentNode.insertBefore(section, oldSection);
+    if (oldSection) { oldSection.style.display = 'none'; }
+
+    var anchor = document.getElementById('comp-mkfmbp8m'); // "Consider yourself limitless" section
+    if (anchor && anchor.nextSibling) {
+      anchor.parentNode.insertBefore(section, anchor.nextSibling);
+    } else if (anchor) {
+      anchor.parentNode.appendChild(section);
     } else {
       document.body.appendChild(section);
     }
