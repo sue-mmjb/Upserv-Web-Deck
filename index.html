@@ -2217,5 +2217,188 @@ box-shadow: 0 6px 18px 0 rgba(124, 191, 213, 0.50);
 
 
 
+<!-- ===== Standalone Prompt-to-Application Section ===== -->
+<style>
+#pta-standalone {
+  background: #FFFFFF;
+  background-image: radial-gradient(#EFD8ED 2px, transparent 0);
+  background-size: 80px 80px;
+  padding: 90px 0 110px;
+  overflow: hidden;
+  font-family: 'wix-madefor-text-v2', system-ui, sans-serif;
+}
+.pta-inner {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+.pta-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  margin-bottom: 52px;
+}
+.pta-pill {
+  position: relative;
+  border-radius: 100px;
+  padding: 11px 26px;
+  font-size: 17px;
+  font-weight: 500;
+  color: #0F0F0F;
+  overflow: hidden;
+  white-space: nowrap;
+  z-index: 1;
+  background: #EDEAE4;
+}
+.pta-pill-gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(270deg, #EDEAE4 0%, #F0C3EC 40%, #FBB439 70%, #EDEAE4 100%);
+  background-size: 200% 100%;
+  opacity: 0;
+  transition: opacity 900ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.pta-prompt .pta-pill-gradient { opacity: 1; }
+.pta-pill-text { position: relative; z-index: 2; }
+.pta-line-track {
+  height: 2px;
+  background: #D8D4CE;
+  flex: 0 0 0px;
+  max-width: 280px;
+  position: relative;
+  overflow: hidden;
+  transition: flex-basis 1100ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.pta-line-fill {
+  position: absolute;
+  left: 0; top: 0;
+  height: 100%; width: 100%;
+  background: linear-gradient(90deg, #FBB439 0%, #F0C3EC 60%, #EDEAE4 100%);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 1100ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.pta-images-row {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  align-items: stretch;
+  overflow: hidden;
+  height: 0;
+  transition: height 700ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.pta-img-wrap {
+  flex: 0 0 calc(19.5% - 11px);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.13);
+  transition:
+    filter 2000ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 2000ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.pta-img-wrap:nth-child(1) { filter: blur(22px); transform: translateX(10vw); }
+.pta-img-wrap:nth-child(2) { filter: blur(18px); transform: translateX(5vw); }
+.pta-img-wrap:nth-child(3) { filter: blur(10px); transform: translateX(0); }
+.pta-img-wrap:nth-child(4) { filter: blur(18px); transform: translateX(-5vw); }
+.pta-img-wrap:nth-child(5) { filter: blur(22px); transform: translateX(-10vw); }
+.pta-img-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* Animated states */
+#pta-standalone.pta-line-on .pta-line-track { flex-basis: 230px; }
+#pta-standalone.pta-line-on .pta-line-fill { transform: scaleX(1); }
+#pta-standalone.pta-app-on .pta-prompt .pta-pill-gradient { opacity: 0; }
+#pta-standalone.pta-app-on .pta-application .pta-pill-gradient { opacity: 1; }
+#pta-standalone.pta-imgs-clear .pta-img-wrap {
+  filter: blur(0) !important;
+  transform: translateX(0) !important;
+}
+
+@media (max-width: 1000px) {
+  .pta-img-wrap { flex-basis: calc(30% - 10px); }
+  .pta-img-wrap:nth-child(4), .pta-img-wrap:nth-child(5) { display: none; }
+}
+@media (max-width: 640px) {
+  #pta-standalone { padding: 60px 0 80px; }
+  .pta-inner { padding: 0 20px; }
+  .pta-pill { font-size: 15px; padding: 9px 20px; }
+  .pta-img-wrap { flex-basis: calc(46% - 7px); }
+  .pta-img-wrap:nth-child(3), .pta-img-wrap:nth-child(4), .pta-img-wrap:nth-child(5) { display: none; }
+}
+</style>
+
+<script>
+(function () {
+  var IMAGES = [
+    { src: 'https://static.wixstatic.com/media/dea07e_65d10875f66249319b7ce0f279a82f88~mv2.jpg/v1/fill/w_700,h_467,al_c,fp_0.61_0.52,q_85,enc_auto/image.jpg', alt: 'Streaming app' },
+    { src: 'https://static.wixstatic.com/media/dea07e_26a8a520812c4fa198ddb388d6f32bd8~mv2.jpg/v1/fill/w_700,h_467,al_c,q_85,enc_auto/image.jpg', alt: 'Financial dashboard' },
+    { src: 'https://static.wixstatic.com/media/dea07e_e483757fe7ed443b9bd5feccd7fa0cb8~mv2.jpg/v1/fill/w_700,h_467,al_c,q_85,enc_auto/image.jpg', alt: 'Mountain trail app' },
+    { src: 'https://static.wixstatic.com/media/dea07e_0c360aa977144d4bba5964164d4a2dae~mv2.jpg/v1/fill/w_700,h_467,al_c,q_85,enc_auto/image.jpg', alt: 'Meal planner app' },
+    { src: 'https://static.wixstatic.com/media/dea07e_30fb6475bedc4fbe8b996437778f1426~mv2.jpg/v1/fill/w_700,h_467,fp_0.29_0.95,q_85,enc_auto/image.jpg', alt: 'Learning hub' }
+  ];
+
+  function buildSection() {
+    var section = document.createElement('section');
+    section.id = 'pta-standalone';
+    section.innerHTML =
+      '<div class="pta-inner">' +
+        '<div class="pta-toggle-row">' +
+          '<div class="pta-pill pta-prompt"><div class="pta-pill-gradient"></div><span class="pta-pill-text">Prompt</span></div>' +
+          '<div class="pta-line-track"><div class="pta-line-fill"></div></div>' +
+          '<div class="pta-pill pta-application"><div class="pta-pill-gradient"></div><span class="pta-pill-text">Application</span></div>' +
+        '</div>' +
+        '<div class="pta-images-row">' +
+          IMAGES.map(function (img) {
+            return '<div class="pta-img-wrap"><img src="' + img.src + '" alt="' + img.alt + '" loading="lazy"></div>';
+          }).join('') +
+        '</div>' +
+      '</div>';
+
+    var oldSection = document.getElementById('comp-mkkxum1d');
+    if (oldSection) {
+      oldSection.style.display = 'none';
+      oldSection.parentNode.insertBefore(section, oldSection);
+    } else {
+      document.body.appendChild(section);
+    }
+
+    var triggered = false;
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting && !triggered) {
+          triggered = true;
+          observer.disconnect();
+          animate(section);
+        }
+      });
+    }, { threshold: 0.15 });
+    observer.observe(section);
+  }
+
+  function animate(section) {
+    var row = section.querySelector('.pta-images-row');
+
+    // Expand images row immediately
+    row.style.height = '230px';
+
+    // Start images sliding in
+    setTimeout(function () { section.classList.add('pta-imgs-clear'); }, 400);
+
+    // Grow the connecting line
+    setTimeout(function () { section.classList.add('pta-line-on'); }, 300);
+
+    // Swap active pill from Prompt → Application
+    setTimeout(function () { section.classList.add('pta-app-on'); }, 950);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', buildSection);
+  } else {
+    buildSection();
+  }
+})();
+</script>
+<!-- ===== End Prompt-to-Application Section ===== -->
+
 </body>
 </html>
